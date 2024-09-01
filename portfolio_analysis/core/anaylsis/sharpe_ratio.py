@@ -11,10 +11,11 @@ class SharpeRatioAnalyser(BaseEstimator, TransformerMixin):
         self.method = method
         self.risk_free_rate = risk_free_rate
 
-    def fit(self, X, y=None):
+    def fit(self, X: pd.DataFrame, y=None):
         returns = np.log(X / X.shift(1)).dropna()
         self.mean_returns = returns.mean()
         self.cov_matrix = returns.cov()
+        self.columns = [c.replace("Close_", "") for c in X.columns]
         return self
     
     def _get_portfolio_performance(self, weights):
@@ -67,7 +68,7 @@ class SharpeRatioAnalyser(BaseEstimator, TransformerMixin):
         returns_range = np.linspace(self.mean_returns.min(), self.mean_returns.max(), 100)
         efficient_frontier = self._calculate_efficient_frontier(returns_range)
         result = {
-            "portfolio_distribution": optimal_weights,
+            "portfolio_distribution": {c: w for c, w in zip(self.columns, optimal_weights)},
             "return": portfolio_return,
             "volatility": portfolio_volatility,
             "sharpe_ratio": sharpe_ratio,

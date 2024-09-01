@@ -11,10 +11,15 @@ class DataReader:
         base_link = "https://query1.finance.yahoo.com/v7/finance/download/"
         end_link = "&events=history&includeAdjustedClose=true"
         df_list = [
-            self._read_from_csv(f"{base_link}{ticker}?period1={start}&period2={end}&interval={interval}{end_link}")
+            self._get_data(base_link, ticker, start, end, interval, end_link)
             for ticker in tickers
         ]
         return pd.concat(df_list, axis=0)
+    
+    def _get_data(self, base_link, ticker, start, end, interval, end_link):
+        df = self._read_from_csv(f"{base_link}{ticker}?period1={start}&period2={end}&interval={interval}{end_link}")
+        df["Ticker"] = ticker
+        return df
 
     def _read_from_csv(self, source: str) -> pd.DataFrame:
         return pd.read_csv(source)

@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 class ResultPrinter:
     def __call__(self, analysis_result: dict):
         self._plot_efficient_frontier(analysis_result)
+        self._print_summary(analysis_result)
     
     def _plot_efficient_frontier(self, analysis_result):
         plt.figure(figsize=(10, 6))
