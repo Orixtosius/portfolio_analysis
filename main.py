@@ -1,10 +1,17 @@
+from datetime import date
 from portfolio_analysis.pipeline_management import PipelineManager
 
 
 
 if __name__ == "__main__":
     config = {
-        "data_source":{"filepath_or_buffer": "data/historical_data.csv"},
+#        "data_source": "data/historical_data.csv",
+        "data_source":{
+            "tickers": ["AMD", "NDVA"],
+            "start": int(date(2023, 9, 1).timetuple()),
+            "end": int(date(2024, 9, 1).timetuple()),
+            "interval": "1d",
+        },
         "transformer": {"stock_column": "Ticker", "price_column": "Close"}       
     }   
     manager = PipelineManager()
